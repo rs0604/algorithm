@@ -1,25 +1,40 @@
 #include <stdio.h>
-
+#include <stdlib.h>//rand()のため
+#include <time.h>
 typedef struct card {
   int number;
   char character;
 } card_t;
 
 void swap(card_t *card1, card_t *card2) {
-  card_t* temp = card2;
-  card1 = card2;
-  card2 = temp;
+  card_t temp;
+  temp.number = card1->number;
+  temp.character = card1->character;
+  card1->number = card2->number;
+  card1->character = card2->character;
+  card2->number = temp.number;
+  card2->character = temp.character;
 }
 
 void trace(card_t deck[], int length) {
   for(int i = 0; i < length; i++) {
-    printf("%c%d ", deck[i].character, deck[i].number);
-    
+    printf("%c%d\t", deck[i].character, deck[i].number);
+    if(!(i % 10)) printf("\n");     
   }
   printf("\n");
 }
 
 void stableSort(card_t deck[], int length) {
+}
+
+#define SHUFFLE_TIMES 1000
+void shuffle(card_t deck[], int length) {
+  srand((unsigned)time(NULL));
+  for(int i = 0; i < SHUFFLE_TIMES; i++) {
+    int val1 = rand() % length;
+    int val2 = rand() % length;
+    swap(&deck[val1], &deck[val2]);
+  }
 }
 
 #define DECK_SIZE 54
@@ -49,7 +64,8 @@ int main(void) {
   deck[52].character = 'J';
   deck[53].number = 0;
   deck[53].character = 'J';
-  
+
+  shuffle(deck, DECK_SIZE);
   trace(deck, DECK_SIZE);
 
   return 0;
