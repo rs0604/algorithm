@@ -17,14 +17,25 @@ void swap(card_t *card1, card_t *card2) {
 }
 
 void trace(card_t deck[], int length) {
+  system("clear");
   for(int i = 0; i < length; i++) {
     printf("%c%d\t", deck[i].character, deck[i].number);
-    if(!((i+1) % 10)) printf("\n");
+    if(!((i+1)%13)) printf("\n");
   }
-  printf("\n");
+  fflush(stdout);
 }
 
-void stableSort(card_t deck[], int length) {
+
+void bubbleSort(card_t deck[], int length) {
+  for(int i = 0; i < length; i++) {
+    for(int j = length-1; j > i; j--) {
+      if(deck[j].number < deck[j-1].number) {
+        swap(&deck[j], &deck[j-1]);
+        usleep(60000);
+        trace(deck, length);
+      }
+    }
+  }
 }
 
 #define SHUFFLE_TIMES 1000
@@ -68,5 +79,8 @@ int main(void) {
   shuffle(deck, DECK_SIZE);
   trace(deck, DECK_SIZE);
 
+  printf("bubble sort.\n");
+  bubbleSort(deck, DECK_SIZE);
+  
   return 0;
 }
