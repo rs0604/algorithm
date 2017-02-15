@@ -19,7 +19,7 @@ void swap(card_t *card1, card_t *card2) {
 void trace(card_t deck[], int length) {
   for(int i = 0; i < length; i++) {
     printf("%c%d\t", deck[i].character, deck[i].number);
-    if(!(i % 10)) printf("\n");     
+    if(!((i+1) % 10)) printf("\n");
   }
   printf("\n");
 }
@@ -70,4 +70,3 @@ int main(void) {
 
   return 0;
 }
-      
