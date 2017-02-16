@@ -38,6 +38,19 @@ void bubbleSort(card_t deck[], int length) {
   }
 }
 
+void selectionSort(card_t deck[], int length) {
+  for(int i = 0; i < length; i++) {
+    int minj = i;
+    for(int j = i; j < length; j++) {
+      if(deck[j].number < deck[minj].number)
+        minj = j;
+    }
+    swap(&deck[i], &deck[minj]);
+    usleep(60000);
+    trace(deck, length);
+  }
+}
+
 #define SHUFFLE_TIMES 1000
 void shuffle(card_t deck[], int length) {
   srand((unsigned)time(NULL));
@@ -46,6 +59,15 @@ void shuffle(card_t deck[], int length) {
     int val2 = rand() % length;
     swap(&deck[val1], &deck[val2]);
   }
+}
+
+int isStable(card_t stable_deck[], card_t test_deck[], int length) {
+  for(int i = 0; i < length; i++) {
+    if(!(stable_deck[i].character == test_deck[i].character)) {
+      return -1;
+    }
+  }
+  return 0;
 }
 
 #define DECK_SIZE 54
@@ -76,11 +98,33 @@ int main(void) {
   deck[53].number = 0;
   deck[53].character = 'J';
 
+  // シャッフルした後、比較元とするためのコピーを作る。
   shuffle(deck, DECK_SIZE);
+  card_t old_deck[DECK_SIZE] = {};
+  memcpy(old_deck, deck, sizeof(deck));
+  
   trace(deck, DECK_SIZE);
 
   printf("bubble sort.\n");
   bubbleSort(deck, DECK_SIZE);
+
+  printf("\ndone!\n");
+  sleep(2);
+
+  card_t selectionSortDeck[DECK_SIZE] = {};
+  memcpy(selectionSortDeck, old_deck, sizeof(old_deck));
+
+  printf("selectionSort.\n");
+  sleep(2);
+  selectionSort(selectionSortDeck, DECK_SIZE);
+  printf("\ndone!\n");
+  sleep(2);
+
+  if(isStable(deck, selectionSortDeck, DECK_SIZE) == -1) {
+    printf("Not Stable.\n");
+  } else {
+    printf("Stable.\n");
+  }
   
   return 0;
 }
